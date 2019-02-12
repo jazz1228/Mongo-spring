@@ -32,6 +32,7 @@ public class UserController {
     @PostMapping("createUser")
     public String createUser(@RequestBody String userData) throws JSONException {
         JSONObject userObject = new JSONObject(userData);
+
         String name = userObject.getString("name");
         String identification = userObject.getString("identification");
         String telephoneNumber = userObject.getString("number");
