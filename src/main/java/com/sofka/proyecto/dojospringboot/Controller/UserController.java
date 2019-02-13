@@ -3,9 +3,13 @@ package com.sofka.proyecto.dojospringboot.Controller;
 import com.sofka.proyecto.dojospringboot.Model.User;
 import com.sofka.proyecto.dojospringboot.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -20,6 +24,14 @@ public class UserController {
     @GetMapping("/")
     public String initPageMessage() {
         return this.INITMESSAGE;
+    }
+
+    @GetMapping("user/{id}")
+    public ResponseEntity<?> getUser(@PathVariable ("id") String id){
+        userRepository.findUserById(id);
+        return ResponseEntity
+                .ok()
+                .body("Poner acá usuario el usuario buscado");
     }
 
     @GetMapping("users")
