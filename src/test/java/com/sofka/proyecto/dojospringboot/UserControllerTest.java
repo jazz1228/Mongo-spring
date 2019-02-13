@@ -36,12 +36,7 @@ public class UserControllerTest {
 
     @Before
     public void init(){
-        User user=User.builder()
-                .id(ObjectId.get())
-                .name("John")
-                .identification("1231234124")
-                .build();
-        users= Arrays.asList(user);
+
     }
 
 
