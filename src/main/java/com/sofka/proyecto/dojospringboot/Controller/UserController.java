@@ -2,12 +2,11 @@ package com.sofka.proyecto.dojospringboot.Controller;
 
 import com.sofka.proyecto.dojospringboot.Model.User;
 import com.sofka.proyecto.dojospringboot.Repository.UserRepository;
-import org.bson.types.ObjectId;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -15,6 +14,7 @@ public class UserController {
 
     private final String INITMESSAGE = "Simple CRUD MONGO_SPRING";
     private final String WARNINGMESSAGE = "User has been";
+
     @Autowired
     UserRepository userRepository;
 
@@ -23,53 +23,36 @@ public class UserController {
         return this.INITMESSAGE;
     }
 
-    @GetMapping("users")
-    public List<User> getAlUsers() {
-        return userRepository.findAll();
+    @GetMapping("user/{id}")
+    public ResponseEntity<?> getUser(@PathVariable ("id") String id){
+        userRepository.findUserById(id);
+        return ResponseEntity
+                .ok()
+                .body("Poner acá usuario el usuario buscado");
+    }
 
+    @GetMapping("users")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @PostMapping("createUser")
-    public String createUser(@RequestBody String userData) throws JSONException {
-        JSONObject userObject = new JSONObject(userData);
-
-        String name = userObject.getString("name");
-        String identification = userObject.getString("identification");
-        String telephoneNumber = userObject.getString("number");
-
-        User user = User.builder()
-                .id(ObjectId.get())
-                .identification(identification)
-                .name(name)
-                .phone(telephoneNumber)
-                .build();
-        userRepository.save(user);
+    public String createUser(@RequestBody User userData)  {
+        userRepository.save(userData);
         return this.WARNINGMESSAGE+" saved Succesfully";
     }
 
     @PutMapping("updateUser/{id}")
-    public String updateUser(@PathVariable("id") String id,@RequestBody String changesUser) throws JSONException {
+    public String updateUser(@PathVariable("id") String id ,@RequestBody User newUser)  {
 
-        User user=userRepository.findUserByIdentification(id);
-        JSONObject changesObject=new JSONObject(changesUser);
-
-        String name=changesObject.getString("name");
-        String identification=changesObject.getString("identification");
-        String telephoneNumber=changesObject.getString("number");
-
-        user.setIdentification(identification);
-        user.setName(name);
-        user.setPhone(telephoneNumber);
-
-        userRepository.save(user);
-
+        newUser.setId(id);
+        userRepository.save(newUser);
         return this.WARNINGMESSAGE+" updated Succesfully";
-
     }
 
     @DeleteMapping("deleteUser/{id}")
     public String deleteUser(@PathVariable("id")String id){
-        userRepository.deleteUserByIdentification(id);
+        userRepository.deleteUserById(id);
         return this.WARNINGMESSAGE+" deleted Succesfully";
     }
 

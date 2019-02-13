@@ -2,23 +2,25 @@ package com.sofka.proyecto.dojospringboot.Model;
 
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "User")
+@Data
+@NoArgsConstructor
 @Builder
-@Getter
-@Setter
 public class User {
 
-    @Id Object id;
-    private String identification;
+    @
+    @Id private String id;
     private String name;
     private String phone;
 
-
-
-
+    public User(String id, String name, String phone) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+    }
 }
